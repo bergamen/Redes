@@ -1,10 +1,13 @@
 import socket
 
+IP_VM = '192.168.100.112'
+IP_SR = '0.0.0.0' 
+
 print('Creando socket - cliente')
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-address = ('localhost',5000)
+address = (IP_SR,8000)
 client_socket.connect(address)
 
 message = "Hola, Mensaje de prueba"
