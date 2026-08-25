@@ -1,19 +1,25 @@
 import socket
+import json
+import sys
 from Http import Http
 
 IP_VM = '192.168.100.114'
 IP_SR = '0.0.0.0' 
 
-def read_HTML(file):
-    html = open(file+".html")
-    text = html.read()
-    html.close()
+def read_all_file(file):
+    file_opened = open(file)
+    text = file_opened.read()
+    file_opened.close()
     return text
 
 if __name__ == "__main__":
     buff_size = 4
     end_of_message = "\n"
     new_socket_address = (IP_VM,8000)
+
+    with open(f"{sys.argv[1]}/{sys.argv[2]}.json") as file:
+        data = json.load(file)
+        usuario = data["usuario"]
 
     print('Creando socket - Servidor')
 
@@ -33,8 +39,8 @@ if __name__ == "__main__":
 
         http_response = Http()
         http_response.create_RESPONSE(200,"OK")
-        http_response.add_header("X-ElQuePregunta","VicenteBenja")
-        http_response.create_HTML(read_HTML("test"),"UTF-8")
+        http_response.add_header("X-ElQuePregunta",usuario)
+        http_response.create_HTML(read_all_file("html/test.html"),"UTF-8")
         print("Respuesta:\n"+http_response.create_String())
         new_socket.send(http_response.create_HTTP_message())
         new_socket.close()

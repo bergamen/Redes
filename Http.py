@@ -15,14 +15,8 @@ class Http:
         if name_header in self.head:
             self.head.pop(name_header)
 
-    def complete_body(self):
-        final_length = 0
-        if "Content-Length" in self.head:
-            final_length = int(self.head["Content-Length"])
-        current_length = len(self.body)
-        if current_length >= final_length:
-            print("Body Completado")
-            self.body_completed = True
+    def header_to_string(self,name_header:str):
+        return f"{name_header}: {self.head[name_header]}\r\n"
 
     def update_content_lenth(self):
         if not "Content-Length" in self.head and len(self.body) == 0:
@@ -50,10 +44,18 @@ class Http:
                 for header in head_aux[1:]:
                     header_splited = header.split(": ")
                     self.head[header_splited[0]] = header_splited[1]
-                self.complete_body()
-        elif not self.body_completed:
+                else:
+                    return
+        if not self.body_completed:
             print("Parseando Body")
-            self.complete_body()
+            final_length = 0
+            if "Content-Length" in self.head:
+                final_length = int(self.head["Content-Length"])
+            current_length = len(self.body)
+            if current_length >= final_length:
+                print("Body Completado")
+                self.body_completed = True
+                self.update_content_lenth()
 
     def head_to_string(self):
         message = self.star_line + "\r\n"
