@@ -3,11 +3,14 @@ import json
 import sys
 from Http import Http
 
-IP_VM = '192.168.100.114'
+IP_VM = '192.168.100.115'
 IP_SR = '0.0.0.0' 
 
-def read_all_file(file):
-    file_opened = open(file)
+def read_all_file(file,par = None):
+    if par == None:
+        file_opened = open(file)
+    else:
+        file_opened = open(file,par)
     text = file_opened.read()
     file_opened.close()
     return text

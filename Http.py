@@ -44,8 +44,8 @@ class Http:
                 for header in head_aux[1:]:
                     header_splited = header.split(": ")
                     self.head[header_splited[0]] = header_splited[1]
-                else:
-                    return
+            else:
+                return
         if not self.body_completed:
             print("Parseando Body")
             final_length = 0
@@ -60,7 +60,7 @@ class Http:
     def head_to_string(self):
         message = self.star_line + "\r\n"
         for header in self.head:
-            message += header + ": " + self.head[header] + "\r\n"
+            message += self.header_to_string(header)
         message += "\r\n"
         return message
 
@@ -82,5 +82,10 @@ class Http:
             cont += f"; charset={parameter}"
         self.add_header("Content-Type",cont)
         self.set_body(html.encode())
-
+    def create_IMAGE(self,image,parameter = None):
+        cont = "image/jpg"
+        if parameter != None:
+            cont += f"; parameter={parameter}"
+        self.add_header("Content-Type",cont)
+        self.set_body(image)
 
