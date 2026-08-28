@@ -1,6 +1,5 @@
-{
-    "usuario":"VicenteBenja",
-    "prohibidos":[
-        "example.com"
-    ]
+{ 
+  "user": "vicentesgarridos403@gmail.com",
+  "blocked": ["www.dcc.uchile.cl", "cc4303.bachmann.cl/secret"],
+  "forbidden_words": [{"proxy": "[REDACTED]"}, {"DCC": "[FORBIDDEN]"}, {"biblioteca": "[???]"}]
 }

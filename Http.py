@@ -65,15 +65,23 @@ class Http:
         return message
 
     def create_String(self):
-        return self.head_to_string() + self.body.decode()
+        if self.head_completed:
+            return self.head_to_string() + self.body.decode()
+        else:
+            return self.body.decode()
 
     def create_HTTP_message(self):
         return self.head_to_string().encode() + self.body
 
+
     def create_REQUEST(self,type,root=""):
+        self.body_completed = True
+        self.head_completed = True
         self.star_line = f"{type} /{root} {self.http_version}"
 
     def create_RESPONSE(self,ncode,scode):
+        self.body_completed = True
+        self.head_completed = True
         self.star_line = f"{self.http_version} {ncode} {scode}"
 
     def create_HTML(self,html,parameter=None):
@@ -89,3 +97,43 @@ class Http:
         self.add_header("Content-Type",cont)
         self.set_body(image)
 
+    def is_close(self):
+        if "Connection" in self.head:
+            if self.head["Connection"] == "keep-alive":
+                return False
+            elif self.head["Connection" ] == "close":
+                return True
+            else:
+                return False
+
+    # def is_REQUEST(self):
+    #     request = ["GET","POST"]
+    #     type_req = self.star_line.split(" ",1)[0]
+    #     if type_req in request:
+    #         return True
+    #     else:
+    #         return False
+
+    # def get_type_REQUEST(self):
+    #     return self.star_line.split(" ",1)[0]
+
+    # def create_HTTP_by_REQUEST(self):
+    #     if not self.is_REQUEST:
+    #         return None
+    #     type_req = self.get_type_REQUEST()
+    #     if type_req == "GET":
+            
+
+    #[{"proxy": "[REDACTED]"}, {"DCC": "[FORBIDDEN]"}, {"biblioteca": "[???]"}]
+    def censurar(self,palabras_prohibidas):
+        if self.body_completed:
+            for palabra_dic in palabras_prohibidas:
+                for palabra in palabra_dic:
+                    while palabra.encode() in self.body:
+                        self.body = self.body.replace(palabra.encode(),palabra_dic[palabra].encode())
+        self.update_content_lenth()
+                        
+
+            
+
+            
